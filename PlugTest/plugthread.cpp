@@ -1,6 +1,6 @@
 #include "plugthread.h"
 
-PlugThread::PlugThread(QThread *parent) : QThread(parent)
+PlugThread::PlugThread(QObject *parent) : QThread(parent)
 {
     isRun = false;
     mSerial = nullptr;

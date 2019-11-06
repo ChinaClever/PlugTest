@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>246</width>
+    <width>252</width>
     <height>344</height>
    </rect>
   </property>
@@ -20,13 +20,13 @@
    <string>串口操作</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../images/image.qrc">
+   <iconset>
     <normaloff>:/image/logo.jpg</normaloff>:/image/logo.jpg</iconset>
   </property>
   <widget class="QLabel" name="stateLab">
    <property name="geometry">
     <rect>
-     <x>110</x>
+     <x>120</x>
      <y>30</y>
      <width>100</width>
      <height>30</height>
@@ -39,7 +39,7 @@
   <widget class="QPushButton" name="updateBtn">
    <property name="geometry">
     <rect>
-     <x>110</x>
+     <x>120</x>
      <y>230</y>
      <width>100</width>
      <height>30</height>
@@ -54,7 +54,7 @@
     <rect>
      <x>20</x>
      <y>230</y>
-     <width>80</width>
+     <width>90</width>
      <height>30</height>
     </rect>
    </property>
@@ -70,7 +70,7 @@
     <rect>
      <x>20</x>
      <y>180</y>
-     <width>80</width>
+     <width>90</width>
      <height>30</height>
     </rect>
    </property>
@@ -86,7 +86,7 @@
     <rect>
      <x>20</x>
      <y>30</y>
-     <width>80</width>
+     <width>90</width>
      <height>30</height>
     </rect>
    </property>
@@ -102,7 +102,7 @@
     <rect>
      <x>20</x>
      <y>80</y>
-     <width>80</width>
+     <width>90</width>
      <height>30</height>
     </rect>
    </property>
@@ -116,7 +116,7 @@
   <widget class="QPushButton" name="workBtn">
    <property name="geometry">
     <rect>
-     <x>110</x>
+     <x>120</x>
      <y>180</y>
      <width>100</width>
      <height>30</height>
@@ -129,7 +129,7 @@
   <widget class="QComboBox" name="comBox">
    <property name="geometry">
     <rect>
-     <x>110</x>
+     <x>120</x>
      <y>80</y>
      <width>100</width>
      <height>30</height>
@@ -149,7 +149,7 @@
     <rect>
      <x>20</x>
      <y>280</y>
-     <width>80</width>
+     <width>90</width>
      <height>30</height>
     </rect>
    </property>
@@ -163,7 +163,7 @@
   <widget class="QPushButton" name="loopBtn">
    <property name="geometry">
     <rect>
-     <x>110</x>
+     <x>120</x>
      <y>280</y>
      <width>100</width>
      <height>30</height>
@@ -176,7 +176,7 @@
   <widget class="QComboBox" name="baudComBox">
    <property name="geometry">
     <rect>
-     <x>110</x>
+     <x>120</x>
      <y>130</y>
      <width>100</width>
      <height>30</height>
@@ -224,7 +224,7 @@
     <rect>
      <x>20</x>
      <y>130</y>
-     <width>80</width>
+     <width>90</width>
      <height>30</height>
     </rect>
    </property>
@@ -236,8 +236,6 @@
    </property>
   </widget>
  </widget>
- <resources>
-  <include location="../../images/image.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

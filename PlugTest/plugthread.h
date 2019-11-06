@@ -11,9 +11,10 @@ class PlugThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit PlugThread(QThread *parent = nullptr);
+    explicit PlugThread(QObject *parent = nullptr);
     ~PlugThread();
 
+    void initSerial(SerialPort *s) {mSerial=s;}
     void startThread();
     void quitThread();
 
