@@ -25,7 +25,8 @@ void MainWindow::initCfg()
     sConfigItem *item = ConfigBase::bulid()->item;
     if(item->com.size()) {
         SerialPort *s = mSerial->getSerialPort();
-        s->open(item->com);
+        s->open(item->com, QSerialPort::Baud19200);
+        initSerial();
     }
 
     ui->ipEdit->setText(item->ip);
@@ -99,17 +100,19 @@ bool MainWindow::inputCheck()
         return false;
     }
 
+
+
     return true;
 }
 
 void MainWindow::on_startBtn_clicked()
 {
-    //if(inputCheck()) {
+    if(inputCheck()) {
         saveCfg();
         mPlugThread->startThread();
         ui->groupBox_1->setEnabled(false);
         ui->groupBox_2->setEnabled(false);
-   // }
+    }
 }
 
 void MainWindow::on_overBtn_clicked()

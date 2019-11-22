@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>插拔测试软件</string>
+   <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QGroupBox" name="groupBox_1">
@@ -42,7 +42,7 @@
         </size>
        </property>
        <property name="text">
-        <string>打开命令:</string>
+        <string>插入命令:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -74,7 +74,7 @@
         </size>
        </property>
        <property name="text">
-        <string>关闭命令:</string>
+        <string>拔出命令:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

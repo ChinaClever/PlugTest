@@ -14,6 +14,7 @@ SerialPortWid::SerialPortWid(QWidget *parent) :
 {
     ui->setupUi(this);
     mSerialPort = new SerialPort(this);
+    ui->baudComBox->setCurrentIndex(1);
 
     initSerialPort();
     initWidget();

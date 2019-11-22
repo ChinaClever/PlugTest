@@ -6,6 +6,7 @@
  */
 #include "snmpthread.h"
 #include <cassert>
+#include "configbase.h"
 
 SnmpThread::SnmpThread(QObject *parent) : QThread(parent)
 {
@@ -27,7 +28,7 @@ void SnmpThread::startRead(const QString &addr)
     //m_snmp_client->cancelWork();
 }
 
-int SnmpThread::getValue(int msec)
+double SnmpThread::getValue(int msec)
 {
     for(int i=0; i<msec; ++i) {
         if(mValues < 0) msleep(1);
@@ -45,7 +46,8 @@ void SnmpThread::onResponseReceived(const qint32, const QtSnmpDataList& values )
 
     for( const auto& value : values ) {
         //qDebug( "%s | %s : %s\n", qPrintable( "192" ),  qPrintable( value.address() ),  qPrintable( value.data()) );
-        //qDebug()<<"onResponseReceived"<<QString(value.address());
+       // qDebug()<<"onResponseReceived"<<value.data().toDouble();
+        mValues = value.data().toDouble();
 //        QStringList list = QString(value.address()).split(".");
 //        for(int j = 1 ; j < list.size()-2; ++j)
 //        {
@@ -65,7 +67,7 @@ void SnmpThread::onRequestFailed( const qint32 request_id )
     emit reqErrSig();
 }
 
-bool SnmpThread::makeRequest(const QString& oid)
+bool SnmpThread::makeRequestSlot(const QString &oid)
 {
     mValues = -1;
     bool ret = m_snmp_client->isBusy();

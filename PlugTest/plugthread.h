@@ -18,8 +18,13 @@ public:
     void startThread();
     void quitThread();
 
+signals:
+    void requestSig(const QString&);
+
 protected:
     void run();
+    void init();
+    void delay(int ms);
     int rtuOpenCmd();
     int rtuCloseCmd();
 

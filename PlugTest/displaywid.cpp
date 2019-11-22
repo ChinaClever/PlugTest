@@ -27,7 +27,7 @@ void DisplayWid::updateData(int id)
         } else {
             list << tr("拔出");
         }
-        list << QString::number(packet->value);
+        list << QString::number(packet->value,'g',3);
         list << QString::number(packet->all);
         list << QString::number(packet->ok);
         list << QString::number(packet->err);

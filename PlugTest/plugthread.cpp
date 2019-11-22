@@ -6,6 +6,7 @@ PlugThread::PlugThread(QObject *parent) : QThread(parent)
     mSerial = nullptr;
     mSnmp = new SnmpThread(this);
     mItem = ConfigBase::bulid()->item;
+    connect(this , SIGNAL(requestSig(const QString&)),mSnmp,SLOT(makeRequestSlot(const QString&)));
 }
 
 PlugThread::~PlugThread()
@@ -20,7 +21,7 @@ void PlugThread::startThread()
         if(!mItem->ip.isEmpty()){
             mSnmp->startRead(mItem->ip);
         }
-            start();
+        start();
     }
 }
 
@@ -32,12 +33,17 @@ void PlugThread::quitThread()
 void PlugThread::openFun(int i)
 {
     sDataPacket *packet = DataPackets::bulid()->get(i);
-    packet->en = 1;
     packet->all++;
     packet->action = 1;
-    mSnmp->makeRequest(mItem->oids[i]);
-    packet->value = mSnmp->getValue(650);
-    if(packet->value > 0) {
+
+    for(int k=0; k<5; k++) {
+        delay(1);
+        emit requestSig(mItem->oids[i]);
+        packet->value = mSnmp->getValue(1000);
+        if(packet->value>0)  break;
+    }
+
+    if(packet->value>0) {
         packet->ok++;
     } else {
         packet->err++;
@@ -47,12 +53,17 @@ void PlugThread::openFun(int i)
 void PlugThread::closeFun(int i)
 {
     sDataPacket *packet = DataPackets::bulid()->get(i);
-    packet->en = 1;
     packet->all++;
-    packet->action = 1;
-    mSnmp->makeRequest(mItem->oids[i]);
-    packet->value = mSnmp->getValue(650);
-    if(packet->value == 0) {
+    packet->action = 0;
+
+    for(int k=0; k<5; k++) {
+        delay(1);
+        emit requestSig(mItem->oids[i]);
+        packet->value = mSnmp->getValue(1000);
+        if(packet->value==0)  break;
+    }
+
+    if(packet->value==0) {
         packet->ok++;
     } else {
         packet->err++;
@@ -65,6 +76,8 @@ int PlugThread::rtuOpenCmd()
     int ret = mSerial->write(array);
     if(ret <= 0) {
         qDebug() << "PlugThread rtuOpenCmd err";
+    } else {
+        delay(3);
     }
 
     return ret;
@@ -76,26 +89,57 @@ int PlugThread::rtuCloseCmd()
     int ret = mSerial->write(array);
     if(ret <= 0) {
         qDebug() << "PlugThread rtuCloseCmd err";
+    } else {
+        delay(3);
     }
-     return ret;
+
+    return ret;
 }
 
+void PlugThread::delay(int ms)
+{
+    if(ms <=0 ) ms = 1;
+    for(int i=0; i<ms; ++i) {
+        if(isRun) sleep(1);
+        else break;
+    }
+}
+
+void PlugThread::init()
+{
+    DataPackets::bulid()->clears();
+    for(int i=0; i<SNMP_SIZE; ++i) {
+        sDataPacket *packet = DataPackets::bulid()->get(i);
+        if(mItem->snmpEn[i]) {
+            packet->en = 1;
+        } else {
+            packet->en = 0;
+        }
+    }
+
+    rtuCloseCmd(); sleep(2);
+}
 
 void PlugThread::run()
 {
+    init();
     isRun = true;
+
     while(isRun) {
+        if(!isRun) break;
         rtuOpenCmd();
-        sleep(mItem->delay/2);
         for(int i=0; i<SNMP_SIZE; ++i) {
             if(mItem->snmpEn[i]) openFun(i);
         }
+        delay(mItem->delay/2 -3);
 
+        if(!isRun) break;
         rtuCloseCmd();
-        sleep(mItem->delay/2);
         for(int i=0; i<SNMP_SIZE; ++i) {
             if(mItem->snmpEn[i]) closeFun(i);
         }
-
+        delay(mItem->delay/2 -3);
     }
+    rtuCloseCmd();
+
 }
