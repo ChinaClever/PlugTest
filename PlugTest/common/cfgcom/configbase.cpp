@@ -1,4 +1,4 @@
-/*
+﻿/*
  * 配置文件公共基类
  *
  *  Created on: 2018年1月1日
@@ -55,7 +55,7 @@ int ConfigBase::getSnmpEn(int id)
     QString prefix = getPrefix();
     QString str = QString("%1_snmp_en_%2").arg(prefix).arg(id);
     int ret = com_cfg_readInt(str, prefix);
-    if(ret <= 0)  ret = 8080;
+    if(ret <= 0)  ret = 0;
     return ret;
 }
 

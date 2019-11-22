@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -58,6 +58,7 @@ void MainWindow::saveCfg()
          item->snmpEn[i] = enBox[i]->isChecked();
          item->oids[i] = oidEdit[i]->text();
      }
+     ConfigBase::bulid()->save();
 }
 
 
@@ -105,12 +106,12 @@ bool MainWindow::inputCheck()
 
 void MainWindow::on_startBtn_clicked()
 {
-    if(inputCheck()) {
+    //if(inputCheck()) {
         saveCfg();
         mPlugThread->startThread();
         ui->groupBox_1->setEnabled(false);
         ui->groupBox_2->setEnabled(false);
-    }
+   // }
 }
 
 void MainWindow::on_overBtn_clicked()

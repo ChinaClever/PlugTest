@@ -1,4 +1,4 @@
-#include "plugthread.h"
+﻿#include "plugthread.h"
 
 PlugThread::PlugThread(QObject *parent) : QThread(parent)
 {
@@ -17,8 +17,10 @@ PlugThread::~PlugThread()
 void PlugThread::startThread()
 {
     if(!isRun) {
-        mSnmp->startRead(mItem->ip);
-        start();
+        if(!mItem->ip.isEmpty()){
+            mSnmp->startRead(mItem->ip);
+        }
+            start();
     }
 }
 
