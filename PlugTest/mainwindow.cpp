@@ -99,8 +99,6 @@ bool MainWindow::inputCheck()
         return false;
     }
 
-
-
     return true;
 }
 
