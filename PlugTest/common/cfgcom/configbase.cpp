@@ -11,10 +11,16 @@ ConfigBase::ConfigBase()
     item = new sConfigItem();
     item->ip = getIp();
     item->com = getCom();
-    item->openCmd = getOpenCmd();
-    item->closeCmd = getCloseCmd();
+    for(int k=0;k<RTUCMD_SIZE;k++)
+    {
+        item->openCmd[k] = getOpenCmd(k);
+        item->closeCmd[k] = getCloseCmd(k);
+    }
     item->delay = getPushTime();
 
+    for(int i=0; i<RTUCMD_SIZE; ++i) {
+        item->rtuCmdEn[i] = getRtuEn(i);
+    }
     for(int i=0; i<SNMP_SIZE; ++i) {
         item->snmpEn[i] = getSnmpEn(i);
         item->oids[i] = getOid(i);
@@ -33,10 +39,16 @@ void ConfigBase::save()
 {
     setIp(item->ip);
     setCom(item->com);
-    setOpenCmd(item->openCmd);
-    setCloseCmd(item->closeCmd);
+    for(int k=0; k<RTUCMD_SIZE;k++)
+    {
+        setOpenCmd(item->openCmd[k],k);
+        setCloseCmd(item->closeCmd[k],k);
+    }
     setPushTime(item->delay);
 
+    for(int i=0; i<RTUCMD_SIZE; ++i) {
+        setRtuEn(i, item->rtuCmdEn[i]);
+    }
     for(int i=0; i<SNMP_SIZE; ++i) {
         setSnmpEn(i, item->snmpEn[i]);
         setOid(i, item->oids[i]);
@@ -54,6 +66,22 @@ int ConfigBase::getSnmpEn(int id)
 {
     QString prefix = getPrefix();
     QString str = QString("%1_snmp_en_%2").arg(prefix).arg(id);
+    int ret = com_cfg_readInt(str, prefix);
+    if(ret <= 0)  ret = 0;
+    return ret;
+}
+
+void ConfigBase::setRtuEn(int id, int s)
+{
+    QString prefix = getPrefix();
+    QString str = QString("%1_rtu_en_%2").arg(prefix).arg(id);
+    com_cfg_writeParam(str, QString::number(s), prefix);
+}
+
+int ConfigBase::getRtuEn(int id)
+{
+    QString prefix = getPrefix();
+    QString str = QString("%1_rtu_en_%2").arg(prefix).arg(id);
     int ret = com_cfg_readInt(str, prefix);
     if(ret <= 0)  ret = 0;
     return ret;
@@ -92,35 +120,35 @@ void ConfigBase::setCom(const QString &name)
 
 
 
-QString ConfigBase::getOpenCmd()
+QString ConfigBase::getOpenCmd(int index)
 {
     QString prefix = getPrefix();
-    QString str = QString("%1_open_cmd").arg(prefix);
+    QString str = QString("%1_open_cmd_%2").arg(prefix).arg(index);
     return com_cfg_readStr(str, prefix);
 }
 
 
-void ConfigBase::setOpenCmd(const QString &cmd)
+void ConfigBase::setOpenCmd(const QString &cmd , int index)
 {
     QString prefix = getPrefix();
-    QString str = QString("%1_open_cmd").arg(prefix);
+    QString str = QString("%1_open_cmd_%2").arg(prefix).arg(index);
     com_cfg_writeParam(str, cmd, prefix);
 }
 
 
 
-QString ConfigBase::getCloseCmd()
+QString ConfigBase::getCloseCmd(int index)
 {
     QString prefix = getPrefix();
-    QString str = QString("%1_close_cmd").arg(prefix);
+    QString str = QString("%1_close_cmd_%2").arg(prefix).arg(index);
     return com_cfg_readStr(str, prefix);
 }
 
 
-void ConfigBase::setCloseCmd(const QString &cmd)
+void ConfigBase::setCloseCmd(const QString &cmd,int index)
 {
     QString prefix = getPrefix();
-    QString str = QString("%1_close_cmd").arg(prefix);
+    QString str = QString("%1_close_cmd_%2").arg(prefix).arg(index);
     com_cfg_writeParam(str, cmd, prefix);
 }
 

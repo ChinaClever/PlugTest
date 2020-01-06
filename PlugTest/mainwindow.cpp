@@ -31,11 +31,22 @@ void MainWindow::initCfg()
 
     ui->ipEdit->setText(item->ip);
     ui->spinBox->setValue(item->delay);
-    ui->openEdit->setText(item->openCmd);
-    ui->closeEdit->setText(item->closeCmd);
+    ui->openEdit->setText(item->openCmd[0]);
+    ui->closeEdit->setText(item->closeCmd[0]);
+    ui->openEdit_2->setText(item->openCmd[1]);
+    ui->closeEdit_2->setText(item->closeCmd[1]);
+    ui->openEdit_3->setText(item->openCmd[2]);
+    ui->closeEdit_3->setText(item->closeCmd[2]);
+    ui->openEdit_4->setText(item->openCmd[3]);
+    ui->closeEdit_4->setText(item->closeCmd[3]);
+
 
     QCheckBox *enBox[] = {ui->enBox_1, ui->enBox_2, ui->enBox_3};
     QLineEdit *oidEdit[] = {ui->oidEdit_1, ui->oidEdit_2, ui->oidEdit_3};
+    QCheckBox *chBox[] = {ui->checkBox, ui->checkBox_2, ui->checkBox_3,ui->checkBox_4};
+    for(int i=0; i<RTUCMD_SIZE; ++i) {
+        chBox[i]->setChecked(item->rtuCmdEn[i]);
+    }
     for(int i=0; i<SNMP_SIZE; ++i) {
         enBox[i]->setChecked(item->snmpEn[i]);
         oidEdit[i]->setText(item->oids[i]);
@@ -50,11 +61,21 @@ void MainWindow::saveCfg()
 
      item->ip = ui->ipEdit->text();
      item->delay = ui->spinBox->value();
-     item->openCmd = ui->openEdit->text();
-     item->closeCmd = ui->closeEdit->text();
+     item->openCmd[0] = ui->openEdit->text();
+     item->closeCmd[0] = ui->closeEdit->text();
+     item->openCmd[1] = ui->openEdit_2->text();
+     item->closeCmd[1] = ui->closeEdit_2->text();
+     item->openCmd[2] = ui->openEdit_3->text();
+     item->closeCmd[2] = ui->closeEdit_3->text();
+     item->openCmd[3] = ui->openEdit_4->text();
+     item->closeCmd[3] = ui->closeEdit_4->text();
 
      QCheckBox *enBox[] = {ui->enBox_1, ui->enBox_2, ui->enBox_3};
      QLineEdit *oidEdit[] = {ui->oidEdit_1, ui->oidEdit_2, ui->oidEdit_3};
+     QCheckBox *chBox[] = {ui->checkBox, ui->checkBox_2, ui->checkBox_3,ui->checkBox_4};
+     for(int i=0; i<RTUCMD_SIZE; ++i) {
+         item->rtuCmdEn[i] = chBox[i]->isChecked();
+     }
      for(int i=0; i<SNMP_SIZE; ++i) {
          item->snmpEn[i] = enBox[i]->isChecked();
          item->oids[i] = oidEdit[i]->text();

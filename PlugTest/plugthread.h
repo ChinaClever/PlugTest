@@ -25,8 +25,8 @@ protected:
     void run();
     void init();
     void delay(int ms);
-    int rtuOpenCmd();
-    int rtuCloseCmd();
+    int rtuOpenCmd(int index);
+    int rtuCloseCmd(int index);
 
     void openFun(int i);
     void closeFun(int i);

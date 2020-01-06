@@ -70,9 +70,9 @@ void PlugThread::closeFun(int i)
     }
 }
 
-int PlugThread::rtuOpenCmd()
+int PlugThread::rtuOpenCmd(int index)
 {
-    QByteArray array = cm_StringToHex(mItem->openCmd);
+    QByteArray array = cm_StringToHex(mItem->openCmd[index]);
     int ret = mSerial->write(array);
     if(ret <= 0) {
         qDebug() << "PlugThread rtuOpenCmd err";
@@ -83,9 +83,9 @@ int PlugThread::rtuOpenCmd()
     return ret;
 }
 
-int PlugThread::rtuCloseCmd()
+int PlugThread::rtuCloseCmd(int index)
 {
-    QByteArray array = cm_StringToHex(mItem->closeCmd);
+    QByteArray array = cm_StringToHex(mItem->closeCmd[index]);
     int ret = mSerial->write(array);
     if(ret <= 0) {
         qDebug() << "PlugThread rtuCloseCmd err";
@@ -117,7 +117,7 @@ void PlugThread::init()
         }
     }
 
-    rtuCloseCmd(); sleep(2);
+    for(int k=0;k<RTUCMD_SIZE;k++)rtuCloseCmd(k); sleep(2);
 }
 
 void PlugThread::run()
@@ -127,19 +127,27 @@ void PlugThread::run()
 
     while(isRun) {
         if(!isRun) break;
-        rtuOpenCmd();
-        for(int i=0; i<SNMP_SIZE; ++i) {
-            if(mItem->snmpEn[i]) openFun(i);
-        }
-        delay(mItem->delay/2 -3);
+        for(int k=0 ; k<RTUCMD_SIZE ; ++k)
+        {
+            if(mItem->rtuCmdEn[k]){
+                rtuOpenCmd(k);
+                delay(mItem->delay);
+                for(int i=0; i<SNMP_SIZE; ++i) {
+                    if(mItem->snmpEn[i]) openFun(i);
+                }
+                delay(mItem->delay);
 
-        if(!isRun) break;
-        rtuCloseCmd();
-        for(int i=0; i<SNMP_SIZE; ++i) {
-            if(mItem->snmpEn[i]) closeFun(i);
+                if(!isRun) break;
+                rtuCloseCmd(k);
+                delay(mItem->delay);
+                for(int i=0; i<SNMP_SIZE; ++i) {
+                    if(mItem->snmpEn[i]) closeFun(i);
+                }
+                delay(mItem->delay);
+            }
         }
-        delay(mItem->delay/2 -3);
     }
-    rtuCloseCmd();
+    for(int k=0 ; k<RTUCMD_SIZE ; ++k)
+        rtuCloseCmd(k);
 
 }
