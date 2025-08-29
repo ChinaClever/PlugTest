@@ -38,8 +38,9 @@ void PlugThread::openFun(int i)
 
     for(int k=0; k<5; k++) {
         delay(1);
-        emit requestSig(mItem->oids[i]);
-        packet->value = mSnmp->getValue(1000);
+        int value = 0;
+        mSnmp->devDataV3(mItem->oids[i] , value);
+        packet->value = value;
         if(packet->value>0)  break;
     }
 
@@ -135,7 +136,7 @@ void PlugThread::run()
                 for(int i=0; i<SNMP_SIZE; ++i) {
                     if(mItem->snmpEn[i]) openFun(i);
                 }
-                delay(mItem->delay);
+                //delay(mItem->delay);
 
                 if(!isRun) break;
                 rtuCloseCmd(k);
@@ -143,7 +144,7 @@ void PlugThread::run()
                 for(int i=0; i<SNMP_SIZE; ++i) {
                     if(mItem->snmpEn[i]) closeFun(i);
                 }
-                delay(mItem->delay);
+                //delay(mItem->delay);
             }
         }
     }

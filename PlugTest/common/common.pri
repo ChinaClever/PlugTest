@@ -1,6 +1,6 @@
 
 INCLUDEPATH += $$PWD
-
+include(snmplib/snmplib.pri)
 include(snmp/snmp.pri)
 include(cfgcom/cfgcom.pri)
 include(msgcom/msgcom.pri)

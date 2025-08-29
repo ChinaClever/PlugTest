@@ -15,7 +15,7 @@ struct sDataPacket
     uint all;
     uint ok;
     uint err;
-    double value;
+    uint value;
 };
 
 
