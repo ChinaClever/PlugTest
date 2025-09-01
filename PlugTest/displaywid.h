@@ -19,7 +19,7 @@ protected slots:
    virtual void timeoutDone();
 
 private:
-
+    int mMode;
 };
 
 #endif // DISPLAYWID_H

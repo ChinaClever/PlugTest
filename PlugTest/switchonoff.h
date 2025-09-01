@@ -16,6 +16,7 @@ public:
     explicit SwitchOnOff(QWidget *parent = nullptr);
     ~SwitchOnOff();
     void init();
+    void get();
 
 private:
     Ui::SwitchOnOff *ui;

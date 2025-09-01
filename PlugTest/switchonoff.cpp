@@ -32,3 +32,21 @@ void SwitchOnOff::init()
     ui->delayOpenspinBox->setValue(mItem->delayOpen);
     ui->delayClosespinBox->setValue(mItem->delayClose);
 }
+
+void SwitchOnOff::get()
+{
+    mItem = ConfigBase::bulid()->item;
+    mItem->testIp = ui->testIPEdit->text();
+    mItem->oids[0] = ui->bitSwOidEdit1->text();
+    mItem->oids[1] = ui->bitSwOidEdit2->text();
+    mItem->oids[2] = ui->bitSwOidEdit3->text();
+    mItem->oids[3] = ui->bitSwOidEdit4->text();
+
+    mItem->readCurOids[0] = ui->bitCurOidEdit1->text();
+    mItem->readCurOids[1] = ui->bitCurOidEdit1->text();
+    mItem->readCurOids[2] = ui->bitCurOidEdit1->text();
+    mItem->readCurOids[3] = ui->bitCurOidEdit1->text();
+    mItem->bitNum = ui->numspinBox->value();
+    mItem->delayOpen = ui->delayOpenspinBox->value();
+    mItem->delayClose = ui->delayClosespinBox->value();
+}

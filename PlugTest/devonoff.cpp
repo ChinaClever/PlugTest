@@ -27,3 +27,17 @@ void DevOnOff::init()
     ui->delayOpenBox->setValue(mItem->delayOpen);
     ui->delayCloseBox->setValue(mItem->delayClose);
 }
+
+void DevOnOff::get()
+{
+    mItem = ConfigBase::bulid()->item;
+    mItem->testIp = ui->testIPEdit->text();
+    mItem->swIp = ui->swIPEdit->text();
+    mItem->oids[0] = ui->swOidEdit->text();
+    mItem->readVolOids[0] = ui->readVolEdit->text();
+    mItem->writeCrMinVolOids[0] = ui->writeCrMinVolEdit->text();
+    mItem->writeMinVolOids[0] = ui->writeMinVolEdit->text();
+    mItem->delayOpen = ui->delayOpenBox->value();
+    mItem->delayClose = ui->delayCloseBox->value();
+}
+

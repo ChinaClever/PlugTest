@@ -33,6 +33,9 @@ void PlugThread::startThread(int mode)
 
 void PlugThread::quitThread()
 {
+    for(int i = 0 ; i < ARRAY_SIZE ; i++){
+        DataPackets::bulid()->get(i)->en = false;
+    }
     isRun = false;
 }
 
@@ -42,11 +45,10 @@ void PlugThread::openFun(int i)
     packet->open++;
     packet->action = 1;
     QString str ,str1;
+    int value = 1;
+    mSnmp->setInfo(mItem->swIp , mItem->oids[i] , QString::number(value));//开关
 
     for(int k=0; k<5; k++) {
-        int value = 1;
-        mSnmp->setInfo(mItem->swIp , mItem->oids[i] , QString::number(value));//开关
-
         mSnmp->devDataV3(mItem->testIp , mItem->readVolOids[i] , str);//read
         mSnmp->devDataV3(mItem->swIp , mItem->oids[i] , str1);//read
 
@@ -68,10 +70,9 @@ void PlugThread::closeFun(int i)
     packet->close++;
     packet->action = 0;
     QString str1;
-
+    int value = 0;
+    mSnmp->setInfo(mItem->swIp ,mItem->oids[i] , QString::number(value));//开关
     for(int k=0; k<5; k++) {
-        int value = 0;
-        mSnmp->setInfo(mItem->swIp ,mItem->oids[i] , QString::number(value));//开关
         mSnmp->devDataV3(mItem->swIp ,mItem->oids[i] , str1);//read
         if(str1.toInt() == 0)  break;
     }
@@ -91,11 +92,9 @@ void PlugThread::open2Fun(int i)
     packet->open++;
     packet->action = 1;
     QString str ,str1;
-
+    int value = 1;
+    mSnmp->setInfo(mItem->testIp , mItem->oids[i] , QString::number(value));//开关
     for(int k=0; k<5; k++) {
-        int value = 1;
-        mSnmp->setInfo(mItem->testIp , mItem->oids[i] , QString::number(value));//开关
-
         mSnmp->devDataV3(mItem->testIp , mItem->readCurOids[i] , str);//read cur
         mSnmp->devDataV3(mItem->testIp , mItem->oids[i] , str1);//read swtich
 
@@ -115,10 +114,9 @@ void PlugThread::close2Fun(int i)
     packet->close++;
     packet->action = 0;
     QString str ,str1;
-
+    int value = 0;
+    mSnmp->setInfo(mItem->testIp , mItem->oids[i] , QString::number(value));//开关
     for(int k=0; k<5; k++) {
-        int value = 0;
-        mSnmp->setInfo(mItem->testIp , mItem->oids[i] , QString::number(value));//开关
         mSnmp->devDataV3(mItem->testIp , mItem->readCurOids[i] , str);//read cur
         mSnmp->devDataV3(mItem->testIp , mItem->oids[i] , str1);//read switch
 
@@ -149,18 +147,22 @@ void PlugThread::init()
 void PlugThread::run()
 {
     init();
+    for(int i = 0 ; i < ARRAY_SIZE ; i++){
+        DataPackets::bulid()->get(i)->en = true;
+    }
     isRun = true;
 
     while(isRun) {
         if(!isRun) break;
 
         if(0 == mMode){
-            delay(mItem->delayOpen);
-            openFun(0);
-
-            if(!isRun) break;
             delay(mItem->delayClose);
             closeFun(0);
+
+            if(!isRun) break;
+
+            delay(mItem->delayOpen);
+            openFun(0);
         }else{
             int num = mItem->bitNum;
             delay(mItem->delayClose);

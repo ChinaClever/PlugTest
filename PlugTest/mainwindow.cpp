@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mMode = 0;
 
     mItem = mPlugThread->mItem;
+    mConfig =ConfigBase::bulid();
 }
 
 MainWindow::~MainWindow()
@@ -40,7 +41,7 @@ bool MainWindow::inputCheck()
             return false;
         }
     }else{
-        QString str = mItem->swIp;
+        QString str = mItem->testIp;
         if(!cm_isIPaddress(str)) {
             CriticalMsgBox box(this, tr("开关PDU IP地址设置错误"));
             return false;
@@ -52,6 +53,9 @@ bool MainWindow::inputCheck()
 
 void MainWindow::on_startBtn_clicked()
 {
+    mDevOnOffWid->get();
+    mSwOnOffWid->get();
+    mConfig->save();
     if(inputCheck()) {
         mPlugThread->startThread(mMode);
     }

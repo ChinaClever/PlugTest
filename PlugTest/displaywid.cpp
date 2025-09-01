@@ -2,6 +2,7 @@
 
 DisplayWid::DisplayWid(int mode, QWidget *parent) : ComTableWid(parent)
 {
+    mMode = mode;
     if(mode == 1) initVolWid();
     else initCurWid();
 }
@@ -37,13 +38,14 @@ void DisplayWid::updateData(int id)
         } else {
             list << tr("关闭");
         }
-        list << QString::number(packet->value/100.0,'f',3);
+        if ( 0 == mMode) list << QString::number(packet->value/10.0,'f',1);
+        else list << QString::number(packet->value/100.0,'f',2);
         list << QString::number(packet->open);
         list << QString::number(packet->close);
         list << QString::number(packet->ok);
         list << QString::number(packet->err);
         setTableRow(id, list);
-    } else {
+    }else {
         clearRow(id);
         setTableRow(id, list);
     }

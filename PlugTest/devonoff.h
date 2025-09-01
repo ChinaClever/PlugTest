@@ -16,6 +16,7 @@ public:
     explicit DevOnOff(QWidget *parent = nullptr);
     ~DevOnOff();
     void init();
+    void get();
 
 private:
     Ui::DevOnOff *ui;
