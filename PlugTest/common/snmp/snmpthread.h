@@ -15,10 +15,12 @@ public:
     explicit SnmpThread(QObject *parent = nullptr);
     ~SnmpThread();
 
-    void startRead(const QString &addr);
+    void startRead(int mode);
     //bool makeRequest(const QString &oid);
     double getValue(int msec);
-    bool devDataV3(const QString &id, int &value);
+    bool devDataV3(const QString &ip,const QString &id, QString &value);
+    bool determine_vb(SmiUINT32 val, Vb &vb, QString str);
+    bool setInfo(const QString &ip, QString o , QString val);
 
 signals:
     void reqErrSig();
@@ -31,7 +33,7 @@ private slots:
 private:
     QMutex *mMutex;
     double mValues;
-    QString mIp;
+    int mMode;
 };
 
 #endif // SNMP_H

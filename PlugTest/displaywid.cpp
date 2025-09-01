@@ -1,15 +1,25 @@
 #include "displaywid.h"
 
-DisplayWid::DisplayWid(QWidget *parent) : ComTableWid(parent)
+DisplayWid::DisplayWid(int mode, QWidget *parent) : ComTableWid(parent)
 {
-    initWid();
+    if(mode == 1) initVolWid();
+    else initCurWid();
 }
 
 
-void DisplayWid::initWid()
+void DisplayWid::initVolWid()
 {
     QStringList header;
-    header << tr("编号") << tr("动态") << tr("状态值") << tr("拔插次数") << tr("成功次数") << tr("失败次数");
+    header << tr("编号") << tr("动态") << tr("电压值") << tr("开次数")<< tr("关次数") << tr("成功次数") << tr("失败次数");
+
+    QString title = tr("测试数据列表");
+    initTableWid(header, 1, title);
+}
+
+void DisplayWid::initCurWid()
+{
+    QStringList header;
+    header << tr("编号") << tr("动态") << tr("电流值") << tr("开次数")<< tr("关次数") << tr("成功次数") << tr("失败次数");
 
     QString title = tr("测试数据列表");
     initTableWid(header, ARRAY_SIZE, title);
@@ -23,12 +33,13 @@ void DisplayWid::updateData(int id)
     sDataPacket *packet = DataPackets::bulid()->get(id);
     if(packet->en) {
         if(packet->action) {
-            list << tr("插入");
+            list << tr("开启");
         } else {
-            list << tr("拔出");
+            list << tr("关闭");
         }
         list << QString::number(packet->value/100.0,'f',3);
-        list << QString::number(packet->all);
+        list << QString::number(packet->open);
+        list << QString::number(packet->close);
         list << QString::number(packet->ok);
         list << QString::number(packet->err);
         setTableRow(id, list);

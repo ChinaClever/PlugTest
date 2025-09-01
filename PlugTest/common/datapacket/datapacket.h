@@ -3,7 +3,7 @@
 #include <QtCore>
 #include <QColor>
 
-#define ARRAY_SIZE 3 //一包数据最长
+#define ARRAY_SIZE 4 //一包数据最长
 
 /**
  * 数据包
@@ -12,7 +12,8 @@ struct sDataPacket
 {
     bool en;
     uchar action;
-    uint all;
+    uint open;
+    uint close;
     uint ok;
     uint err;
     uint value;

@@ -2,8 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "displaywid.h"
 #include "plugthread.h"
+#include "devonoff.h"
+#include "switchonoff.h"
 
 namespace Ui {
 class MainWindow;
@@ -18,23 +19,21 @@ public:
     ~MainWindow();
 
 protected:
-    void initSerial();
-    void initCfg();
-    void saveCfg();
     bool inputCheck();
 
 private slots:
-    void on_comBtn_clicked();
-
     void on_startBtn_clicked();
-
     void on_overBtn_clicked();
+
+    void on_modeBox_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;
-    DisplayWid *mDisplayWid;
-    SerialPortDlg *mSerial;
     PlugThread *mPlugThread;
+    DevOnOff *mDevOnOffWid;
+    SwitchOnOff *mSwOnOffWid;
+    int mMode;
+    sConfigItem *mItem;
 };
 
 #endif // MAINWINDOW_H

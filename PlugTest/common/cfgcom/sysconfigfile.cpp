@@ -1,24 +1,36 @@
 /*
- * sysconfigfile.cpp
- *  配置文件的操作接口
- *  配置参数的保存与读取
  *
- *  Created on: 2016年10月11日
+ *  Created on: 2020年10月1日
  *      Author: Lzy
  */
 #include "sysconfigfile.h"
 
+CfgCom::CfgCom(QObject *parent)
+{
+    mCfgIni = nullptr;
+    QCoreApplication::setOrganizationName("CLEVER");
+    QCoreApplication::setOrganizationDomain("clever.com");
+    QCoreApplication::setApplicationName("PlugTest");
 
+    cfgOpen(parent);
+}
 
-static QSettings *pConfigIni = NULL;
+CfgCom *CfgCom::bulid(QObject *parent)
+{
+    static CfgCom* sington = nullptr;
+    if(sington == nullptr)
+        sington = new CfgCom(parent);
+    return sington;
+}
+
 
 /***
   * 获取程序数据目录
   */
-QString cm_pathOfData(const QString& name)
+QString CfgCom::pathOfData(const QString& name)
 {
-    QDir dataDir(QDir::home());
-    QString dirName = ".PlugTest";
+    QDir dataDir(QDir::home());  //QCoreApplication::applicationDirPath()
+    QString dirName = "." + QCoreApplication::applicationName();
     if(!dataDir.exists(dirName))
         dataDir.mkdir(dirName);
     dataDir.cd(dirName);
@@ -29,90 +41,40 @@ QString cm_pathOfData(const QString& name)
  * 功 能：打开系统配置文件
  * 开发人员：Lzy     2016 - 七夕
  */
-bool com_cfg_open(void)
+bool CfgCom::cfgOpen(QObject *parent, const QString& fn)
 {
-    QString strFilename = cm_pathOfData( "sysconfig.ini");
+    QString strFilename = pathOfData(fn);
     bool ret = QFileInfo(strFilename).exists();
-    if(pConfigIni==NULL) {
-        pConfigIni = new QSettings(strFilename, QSettings::IniFormat);
-        //        pConfigIni->setIniCodec(QTextCodec::codecForName("utf-8")); // gb18030
+    if(mCfgIni == nullptr) {
+        mCfgIni = new QSettings(strFilename, QSettings::IniFormat, parent);
+        mCfgIni->setIniCodec(QTextCodec::codecForName("utf-8")); // gb18030
     }
 
     return ret;
 }
 
+
 /**
- * 功 能：关闭系统配置文件
+ * 功 能：参数写入配置文件
  * 开发人员：Lzy     2016 - 七夕
  */
-void com_cfg_close(void)
+void CfgCom::write(const QString& key, const QVariant &v, const QString& g)
 {
-    // delete pConfigIni;
-    // pConfigIni = NULL;
-
-    pConfigIni->sync();
-}
-
-/**
- * 功 能：读字符串配置文件
- * 开发人员：Lzy     2013 - 七夕
- */
-QString com_cfg_readStr(QString strParameterName, QString strGroup)
-{
-    strParameterName = "/" + strGroup + "/" + strParameterName;
-
-    com_cfg_open();
-    QString strParameter = pConfigIni->value(strParameterName).toString();
-    com_cfg_close();
-
-    return strParameter;
+    mCfgIni->beginGroup(g);
+    mCfgIni->setValue(key, v);
+    mCfgIni->endGroup();
+    //mCfgIni->sync();
 }
 
 /**
  * 功 能：读整形串配置文件
  * 开发人员：Lzy     2016 - 七夕
  */
-int com_cfg_readInt(QString strParameterName, QString strGroup)
-{       
-    bool ok;
-
-    int ret = com_cfg_readStr(strParameterName, strGroup).toInt(&ok);
-    if(!ok)  ret = -1;
+QVariant CfgCom::read(const QString &key, const QVariant &v, const QString& g)
+{
+    mCfgIni->beginGroup(g);
+    QVariant ret = mCfgIni->value(key, v);
+    mCfgIni->endGroup();
 
     return ret;
-}
-
-/**
- * 功 能：读浮点形串配置文件
- * 开发人员：Lzy     2013 - 七夕
- */
-double com_cfg_readDouble(QString strParameterName, QString strGroup)
-{
-    bool ok;
-
-    double ret = com_cfg_readStr(strParameterName, strGroup).toDouble(&ok);
-    if(!ok)  ret = -1;
-
-    return ret;
-}
-
-/**
- * 功 能：参数写入配置文件
- * 开发人员：Lzy     2016 - 七夕
- */
-void com_cfg_write(QString strParameterName, QString strParameter, QString strGroup)
-{
-    strParameterName = "/" + strGroup + "/" + strParameterName;
-    pConfigIni->setValue(strParameterName, strParameter);
-}
-
-/**
- * 功 能：写入参数
- * 开发人员：Lzy     2016 - 七夕
- */
-void com_cfg_writeParam(QString name, QString value, QString strGroup)
-{
-    com_cfg_open();
-    com_cfg_write(name, value, strGroup);
-    com_cfg_close();
 }

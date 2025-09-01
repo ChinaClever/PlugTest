@@ -30,18 +30,24 @@ CONFIG += c++11
 include(common/common.pri)
 
 SOURCES += \
+    devonoff.cpp \
         main.cpp \
         mainwindow.cpp \
     displaywid.cpp \
-    plugthread.cpp
+    plugthread.cpp \
+    switchonoff.cpp
 
 HEADERS += \
+    devonoff.h \
         mainwindow.h \
     displaywid.h \
-    plugthread.h
+    plugthread.h \
+    switchonoff.h
 
 FORMS += \
-        mainwindow.ui
+        devonoff.ui \
+        mainwindow.ui \
+        switchonoff.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -3,7 +3,6 @@
 PlugThread::PlugThread(QObject *parent) : QThread(parent)
 {
     isRun = false;
-    mSerial = nullptr;
     mSnmp = new SnmpThread(this);
     mItem = ConfigBase::bulid()->item;
     connect(this , SIGNAL(requestSig(const QString&)),mSnmp,SLOT(makeRequestSlot(const QString&)));
@@ -15,11 +14,18 @@ PlugThread::~PlugThread()
     wait();
 }
 
-void PlugThread::startThread()
+void PlugThread::startThread(int mode)
 {
     if(!isRun) {
-        if(!mItem->ip.isEmpty()){
-            mSnmp->startRead(mItem->ip);
+        mMode = mode;
+        if(0 == mode){
+            if(!mItem->swIp.isEmpty() && !mItem->testIp.isEmpty()){
+                mSnmp->startRead(mode);
+            }
+        }else{
+            if(!mItem->testIp.isEmpty()){
+                mSnmp->startRead(mode);
+            }
         }
         start();
     }
@@ -33,20 +39,25 @@ void PlugThread::quitThread()
 void PlugThread::openFun(int i)
 {
     sDataPacket *packet = DataPackets::bulid()->get(i);
-    packet->all++;
+    packet->open++;
     packet->action = 1;
+    QString str ,str1;
 
     for(int k=0; k<5; k++) {
-        delay(1);
-        int value = 0;
-        mSnmp->devDataV3(mItem->oids[i] , value);
-        packet->value = value;
-        if(packet->value>0)  break;
+        int value = 1;
+        mSnmp->setInfo(mItem->swIp , mItem->oids[i] , QString::number(value));//开关
+
+        mSnmp->devDataV3(mItem->testIp , mItem->readVolOids[i] , str);//read
+        mSnmp->devDataV3(mItem->swIp , mItem->oids[i] , str1);//read
+
+        if(str.toInt() > 200 && str1.toInt() == 1)  break;
     }
 
-    if(packet->value>0) {
+    if(str.toInt() > 200 && str1.toInt() == 1) {
         packet->ok++;
     } else {
+        mSnmp->setInfo(mItem->swIp ,mItem->writeCrMinVolOids[0] , "2400");//开关
+        mSnmp->setInfo(mItem->swIp ,mItem->writeMinVolOids[0] , "2400");//开关
         packet->err++;
     }
 }
@@ -54,47 +65,71 @@ void PlugThread::openFun(int i)
 void PlugThread::closeFun(int i)
 {
     sDataPacket *packet = DataPackets::bulid()->get(i);
-    packet->all++;
+    packet->close++;
     packet->action = 0;
+    QString str1;
 
     for(int k=0; k<5; k++) {
-        delay(1);
-        emit requestSig(mItem->oids[i]);
-        packet->value = mSnmp->getValue(1000);
-        if(packet->value==0)  break;
+        int value = 0;
+        mSnmp->setInfo(mItem->swIp ,mItem->oids[i] , QString::number(value));//开关
+        mSnmp->devDataV3(mItem->swIp ,mItem->oids[i] , str1);//read
+        if(str1.toInt() == 0)  break;
+    }
+    if(str1.toInt() == 0) {
+        packet->ok++;
+    } else {
+        mSnmp->setInfo(mItem->swIp ,mItem->writeCrMinVolOids[0] , "2400");//开关
+        mSnmp->setInfo(mItem->swIp ,mItem->writeMinVolOids[0] , "2400");//开关
+        packet->err++;
+    }
+}
+
+
+void PlugThread::open2Fun(int i)
+{
+    sDataPacket *packet = DataPackets::bulid()->get(i);
+    packet->open++;
+    packet->action = 1;
+    QString str ,str1;
+
+    for(int k=0; k<5; k++) {
+        int value = 1;
+        mSnmp->setInfo(mItem->testIp , mItem->oids[i] , QString::number(value));//开关
+
+        mSnmp->devDataV3(mItem->testIp , mItem->readCurOids[i] , str);//read cur
+        mSnmp->devDataV3(mItem->testIp , mItem->oids[i] , str1);//read swtich
+
+        if(str.toInt() > 10 && str1.toInt() == 1)  break;
     }
 
-    if(packet->value==0) {
+    if(str.toInt() > 10 && str1.toInt() == 1) {
         packet->ok++;
     } else {
         packet->err++;
     }
 }
 
-int PlugThread::rtuOpenCmd(int index)
+void PlugThread::close2Fun(int i)
 {
-    QByteArray array = cm_StringToHex(mItem->openCmd[index]);
-    int ret = mSerial->write(array);
-    if(ret <= 0) {
-        qDebug() << "PlugThread rtuOpenCmd err";
-    } else {
-        delay(3);
+    sDataPacket *packet = DataPackets::bulid()->get(i);
+    packet->close++;
+    packet->action = 0;
+    QString str ,str1;
+
+    for(int k=0; k<5; k++) {
+        int value = 0;
+        mSnmp->setInfo(mItem->testIp , mItem->oids[i] , QString::number(value));//开关
+        mSnmp->devDataV3(mItem->testIp , mItem->readCurOids[i] , str);//read cur
+        mSnmp->devDataV3(mItem->testIp , mItem->oids[i] , str1);//read switch
+
+        if(str.toInt() == 0 && str1.toInt() == 0)  break;
     }
 
-    return ret;
-}
-
-int PlugThread::rtuCloseCmd(int index)
-{
-    QByteArray array = cm_StringToHex(mItem->closeCmd[index]);
-    int ret = mSerial->write(array);
-    if(ret <= 0) {
-        qDebug() << "PlugThread rtuCloseCmd err";
+    if(str.toInt() == 0 && str1.toInt() == 0) {
+        packet->ok++;
     } else {
-        delay(3);
+        packet->err++;
     }
-
-    return ret;
 }
 
 void PlugThread::delay(int ms)
@@ -109,16 +144,6 @@ void PlugThread::delay(int ms)
 void PlugThread::init()
 {
     DataPackets::bulid()->clears();
-    for(int i=0; i<SNMP_SIZE; ++i) {
-        sDataPacket *packet = DataPackets::bulid()->get(i);
-        if(mItem->snmpEn[i]) {
-            packet->en = 1;
-        } else {
-            packet->en = 0;
-        }
-    }
-
-    for(int k=0;k<RTUCMD_SIZE;k++)rtuCloseCmd(k); sleep(2);
 }
 
 void PlugThread::run()
@@ -128,27 +153,25 @@ void PlugThread::run()
 
     while(isRun) {
         if(!isRun) break;
-        for(int k=0 ; k<RTUCMD_SIZE ; ++k)
-        {
-            if(mItem->rtuCmdEn[k]){
-                rtuOpenCmd(k);
-                delay(mItem->delay);
-                for(int i=0; i<SNMP_SIZE; ++i) {
-                    if(mItem->snmpEn[i]) openFun(i);
-                }
-                //delay(mItem->delay);
 
-                if(!isRun) break;
-                rtuCloseCmd(k);
-                delay(mItem->delay);
-                for(int i=0; i<SNMP_SIZE; ++i) {
-                    if(mItem->snmpEn[i]) closeFun(i);
-                }
-                //delay(mItem->delay);
+        if(0 == mMode){
+            delay(mItem->delayOpen);
+            openFun(0);
+
+            if(!isRun) break;
+            delay(mItem->delayClose);
+            closeFun(0);
+        }else{
+            int num = mItem->bitNum;
+            delay(mItem->delayClose);
+            for(int i = 0 ; i < num ; i++){
+                close2Fun(i);
+            }
+            delay(mItem->delayOpen);
+            for(int i = 0 ; i < num ; i++){
+                open2Fun(i);
             }
         }
     }
-    for(int k=0 ; k<RTUCMD_SIZE ; ++k)
-        rtuCloseCmd(k);
 
 }

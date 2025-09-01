@@ -8,10 +8,11 @@ class DisplayWid : public ComTableWid
 {
     Q_OBJECT
 public:
-    DisplayWid(QWidget *parent = nullptr);
+    DisplayWid(int mode , QWidget *parent = nullptr);
 
 protected:
-    void initWid();
+    void initVolWid();;
+    void initCurWid();
     void updateData(int id);
 
 protected slots:

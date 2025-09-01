@@ -14,9 +14,10 @@ public:
     explicit PlugThread(QObject *parent = nullptr);
     ~PlugThread();
 
-    void initSerial(SerialPort *s) {mSerial=s;}
-    void startThread();
+//    void initSerial(SerialPort *s) {mSerial=s;}
+    void startThread(int mode);
     void quitThread();
+    sConfigItem *mItem;
 
 signals:
     void requestSig(const QString&);
@@ -25,17 +26,19 @@ protected:
     void run();
     void init();
     void delay(int ms);
-    int rtuOpenCmd(int index);
-    int rtuCloseCmd(int index);
+//    int rtuOpenCmd(int index);
+//    int rtuCloseCmd(int index);
 
     void openFun(int i);
     void closeFun(int i);
+    void open2Fun(int i);
+    void close2Fun(int i);
 
 private:
     bool isRun;
     SnmpThread *mSnmp;
-    SerialPort *mSerial;
-    sConfigItem *mItem;
+    int mMode;
+//    SerialPort *mSerial;
 };
 
 #endif // PLUGTHREAD_H
