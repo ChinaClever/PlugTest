@@ -26,6 +26,7 @@ void DevOnOff::init()
     ui->writeMinVolEdit->setText(mItem->writeMinVolOids[0]);
     ui->delayOpenBox->setValue(mItem->delayOpen);
     ui->delayCloseBox->setValue(mItem->delayClose);
+    ui->delayBox->setValue(mItem->delay);
 }
 
 void DevOnOff::get()
@@ -39,5 +40,6 @@ void DevOnOff::get()
     mItem->writeMinVolOids[0] = ui->writeMinVolEdit->text();
     mItem->delayOpen = ui->delayOpenBox->value();
     mItem->delayClose = ui->delayCloseBox->value();
+    mItem->delay = ui->delayBox->value();
 }
 

@@ -49,6 +49,7 @@ void PlugThread::openFun(int i)
     mSnmp->setInfo(mItem->swIp , mItem->oids[i] , QString::number(value));//开关
 
     for(int k=0; k<5; k++) {
+        delay(mItem->delay);
         mSnmp->devDataV3(mItem->testIp , mItem->readVolOids[i] , str);//read
         mSnmp->devDataV3(mItem->swIp , mItem->oids[i] , str1);//read
 
@@ -73,6 +74,7 @@ void PlugThread::closeFun(int i)
     int value = 0;
     mSnmp->setInfo(mItem->swIp ,mItem->oids[i] , QString::number(value));//开关
     for(int k=0; k<5; k++) {
+        delay(mItem->delay);
         mSnmp->devDataV3(mItem->swIp ,mItem->oids[i] , str1);//read
         if(str1.toInt() == 0)  break;
     }
@@ -95,6 +97,7 @@ void PlugThread::open2Fun(int i)
     int value = 1;
     mSnmp->setInfo(mItem->testIp , mItem->oids[i] , QString::number(value));//开关
     for(int k=0; k<5; k++) {
+        delay(mItem->delay);
         mSnmp->devDataV3(mItem->testIp , mItem->readCurOids[i] , str);//read cur
         mSnmp->devDataV3(mItem->testIp , mItem->oids[i] , str1);//read swtich
 
@@ -117,6 +120,7 @@ void PlugThread::close2Fun(int i)
     int value = 0;
     mSnmp->setInfo(mItem->testIp , mItem->oids[i] , QString::number(value));//开关
     for(int k=0; k<5; k++) {
+        delay(mItem->delay);
         mSnmp->devDataV3(mItem->testIp , mItem->readCurOids[i] , str);//read cur
         mSnmp->devDataV3(mItem->testIp , mItem->oids[i] , str1);//read switch
 

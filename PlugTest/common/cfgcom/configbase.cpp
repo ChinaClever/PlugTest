@@ -16,6 +16,7 @@ ConfigBase::ConfigBase()
     item->delayClose = getCloseTime();
     item->delayOpen = getOpenTime();
     item->bitNum = getBitNum();
+    item->delay = getDelayTime();
 
     for(int i=0; i<SNMP_SIZE; ++i) {
         item->readVolOids[i] = getReadVolOids(i);
@@ -42,7 +43,7 @@ void ConfigBase::save()
 
     setCloseTime(item->delayClose);
     setOpenTime(item->delayOpen);
-
+    setDelayTime(item->delay);
 
     for(int i=0; i<SNMP_SIZE; ++i) {
         setReadVolOids(i , item->readVolOids[i]);
@@ -188,6 +189,25 @@ void ConfigBase::setCloseTime(int s)
 {
     QString prefix = getPrefix();
     QString str = QString("%1_Close_time").arg(prefix);
+    write(str, QString::number(s), prefix);
+}
+
+int ConfigBase::getDelayTime()
+{
+    QString prefix = getPrefix();
+    QString str = QString("%1_Delay_time").arg(prefix);
+    int ret = read(str, 1 ,prefix).toInt();
+    return ret;
+}
+
+/**
+ * @brief 设置读取状态延时时间
+ * @param num
+ */
+void ConfigBase::setDelayTime(int s)
+{
+    QString prefix = getPrefix();
+    QString str = QString("%1_Delay_time").arg(prefix);
     write(str, QString::number(s), prefix);
 }
 

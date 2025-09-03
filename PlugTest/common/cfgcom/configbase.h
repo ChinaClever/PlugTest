@@ -11,6 +11,7 @@ struct sConfigItem
     QString testIp;
     int delayClose;
     int delayOpen;
+    int delay;
     int bitNum;
 
     QString openCmd[RTUCMD_SIZE];
@@ -67,6 +68,9 @@ protected:
 
     int getBitNum();
     void setBitNum(int s);
+
+    int getDelayTime();
+    void setDelayTime(int s);
 
     void write(const QString &key, const QVariant& v, const QString &g="cfg");
     QVariant read(const QString &key, const QVariant &v = QVariant(), const QString &g="cfg");

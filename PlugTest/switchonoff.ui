@@ -20,7 +20,33 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="5" column="0" colspan="2">
+   <item row="8" column="0">
+    <widget class="QLineEdit" name="bitSwOidEdit2"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>延时后开启时间：</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QSpinBox" name="delayOpenspinBox">
+     <property name="value">
+      <number>5</number>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
     <widget class="QLabel" name="label_5">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -36,69 +62,11 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="2">
-    <widget class="QLineEdit" name="bitCurOidEdit1"/>
+   <item row="10" column="2">
+    <widget class="QLineEdit" name="bitCurOidEdit4"/>
    </item>
-   <item row="5" column="2">
-    <widget class="QSpinBox" name="numspinBox">
-     <property name="maximum">
-      <number>4</number>
-     </property>
-     <property name="value">
-      <number>4</number>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="2">
-    <widget class="QLabel" name="label_2">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>延时后关闭时间：</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0" colspan="2">
-    <widget class="QLabel" name="label_4">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>输出位开关OID</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0">
-    <widget class="QLineEdit" name="bitSwOidEdit3"/>
-   </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QLabel" name="label_3">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>延时后关闭时间：</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
+   <item row="9" column="2">
+    <widget class="QLineEdit" name="bitCurOidEdit3"/>
    </item>
    <item row="6" column="2">
     <widget class="QLabel" name="label_6">
@@ -116,35 +84,42 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
-    <widget class="QLineEdit" name="bitSwOidEdit1"/>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>延时后关闭时间：</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
    </item>
-   <item row="8" column="0">
-    <widget class="QLineEdit" name="bitSwOidEdit2"/>
-   </item>
-   <item row="8" column="2">
-    <widget class="QLineEdit" name="bitCurOidEdit2"/>
-   </item>
-   <item row="4" column="2">
-    <widget class="QSpinBox" name="delayOpenspinBox">
+   <item row="1" column="2">
+    <widget class="QSpinBox" name="delayClosespinBox">
      <property name="value">
       <number>5</number>
      </property>
     </widget>
    </item>
-   <item row="10" column="2">
-    <widget class="QLineEdit" name="bitCurOidEdit4"/>
-   </item>
-   <item row="10" column="0">
-    <widget class="QLineEdit" name="bitSwOidEdit4"/>
-   </item>
-   <item row="9" column="2">
-    <widget class="QLineEdit" name="bitCurOidEdit3"/>
-   </item>
-   <item row="3" column="2">
-    <widget class="QSpinBox" name="delayClosespinBox">
-     <property name="value">
-      <number>5</number>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_7">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>延时读取时间：</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -170,7 +145,41 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="10" column="0">
+    <widget class="QLineEdit" name="bitSwOidEdit4"/>
+   </item>
+   <item row="8" column="2">
+    <widget class="QLineEdit" name="bitCurOidEdit2"/>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>输出位开关OID</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLineEdit" name="bitSwOidEdit1"/>
+   </item>
+   <item row="9" column="0">
+    <widget class="QLineEdit" name="bitSwOidEdit3"/>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLineEdit" name="testIPEdit"/>
+   </item>
+   <item row="7" column="2">
+    <widget class="QLineEdit" name="bitCurOidEdit1"/>
+   </item>
+   <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -192,8 +201,22 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="2">
-    <widget class="QLineEdit" name="testIPEdit"/>
+   <item row="5" column="2">
+    <widget class="QSpinBox" name="numspinBox">
+     <property name="maximum">
+      <number>4</number>
+     </property>
+     <property name="value">
+      <number>4</number>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2">
+    <widget class="QSpinBox" name="delayBox">
+     <property name="value">
+      <number>1</number>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

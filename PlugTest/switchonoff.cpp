@@ -31,6 +31,7 @@ void SwitchOnOff::init()
     ui->numspinBox->setValue(mItem->bitNum);
     ui->delayOpenspinBox->setValue(mItem->delayOpen);
     ui->delayClosespinBox->setValue(mItem->delayClose);
+    ui->delayBox->setValue(mItem->delay);
 }
 
 void SwitchOnOff::get()
@@ -49,4 +50,5 @@ void SwitchOnOff::get()
     mItem->bitNum = ui->numspinBox->value();
     mItem->delayOpen = ui->delayOpenspinBox->value();
     mItem->delayClose = ui->delayClosespinBox->value();
+    mItem->delay = ui->delayBox->value();
 }
