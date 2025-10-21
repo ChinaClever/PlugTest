@@ -52,7 +52,7 @@ void PlugThread::openFun(int i)
         delay(mItem->delay);
         mSnmp->devDataV3(mItem->testIp , mItem->readVolOids[i] , str);//read
         mSnmp->devDataV3(mItem->swIp , mItem->oids[i] , str1);//read
-
+        packet->value = str.toInt();
         if(str.toInt() > 200 && str1.toInt() == 1)  break;
     }
 
@@ -100,6 +100,7 @@ void PlugThread::open2Fun(int i)
         delay(mItem->delay);
         mSnmp->devDataV3(mItem->testIp , mItem->readCurOids[i] , str);//read cur
         mSnmp->devDataV3(mItem->testIp , mItem->oids[i] , str1);//read swtich
+        packet->value = str.toInt();
 
         if(str.toInt() > 10 && str1.toInt() == 1)  break;
     }
@@ -123,7 +124,7 @@ void PlugThread::close2Fun(int i)
         delay(mItem->delay);
         mSnmp->devDataV3(mItem->testIp , mItem->readCurOids[i] , str);//read cur
         mSnmp->devDataV3(mItem->testIp , mItem->oids[i] , str1);//read switch
-
+        packet->value = str.toInt();
         if(str.toInt() == 0 && str1.toInt() == 0)  break;
     }
 

@@ -38,7 +38,7 @@ void DisplayWid::updateData(int id)
         } else {
             list << tr("关闭");
         }
-        if ( 0 == mMode) list << QString::number(packet->value/10.0,'f',1);
+        if ( 1 == mMode) list << QString::number(packet->value/10.0,'f',1);
         else list << QString::number(packet->value/100.0,'f',2);
         list << QString::number(packet->open);
         list << QString::number(packet->close);
