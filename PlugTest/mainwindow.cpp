@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mSwOnOffWid = new SwitchOnOff(ui->tabWidget);
     ui->tabWidget->addTab(mSwOnOffWid, str);
     mMode = 0;
+    tMode = 0;
 
     mItem = mPlugThread->mItem;
     mConfig =ConfigBase::bulid();
@@ -57,7 +58,7 @@ void MainWindow::on_startBtn_clicked()
     mSwOnOffWid->get();
     mConfig->save();
     if(inputCheck()) {
-        mPlugThread->startThread(mMode);
+        mPlugThread->startThread(mMode,tMode);
     }
 }
 
@@ -70,3 +71,10 @@ void MainWindow::on_modeBox_currentIndexChanged(int index)
 {
     mMode = index;
 }
+
+
+void MainWindow::on_typeBox_currentIndexChanged(int index)
+{
+    tMode = index;
+}
+

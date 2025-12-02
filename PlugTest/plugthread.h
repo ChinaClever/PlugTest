@@ -15,7 +15,7 @@ public:
     ~PlugThread();
 
 //    void initSerial(SerialPort *s) {mSerial=s;}
-    void startThread(int mode);
+    void startThread(int mode,int tmode);
     void quitThread();
     sConfigItem *mItem;
 
@@ -33,11 +33,15 @@ protected:
     void closeFun(int i);
     void open2Fun(int i);
     void close2Fun(int i);
-
+private:
+    // 检查开关是否处于“开”状态
+    bool isSwitchOpen(const QString& switchStateStr, const QString& targetValue);
+    bool isSwitchClosed(const QString& switchStateStr, const QString& targetValue);
 private:
     bool isRun;
     SnmpThread *mSnmp;
     int mMode;
+    int tMode;
 //    SerialPort *mSerial;
 };
 

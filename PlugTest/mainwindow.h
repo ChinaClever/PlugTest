@@ -28,12 +28,16 @@ private slots:
 
     void on_modeBox_currentIndexChanged(int index);
 
+
+    void on_typeBox_currentIndexChanged(int index);
+
 private:
     Ui::MainWindow *ui;
     PlugThread *mPlugThread;
     DevOnOff *mDevOnOffWid;
     SwitchOnOff *mSwOnOffWid;
     int mMode;
+    int tMode;
     sConfigItem *mItem;
 };
 
