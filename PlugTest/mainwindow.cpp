@@ -54,8 +54,11 @@ bool MainWindow::inputCheck()
 
 void MainWindow::on_startBtn_clicked()
 {
-    mDevOnOffWid->get();
-    mSwOnOffWid->get();
+    if(mMode == 0){
+        mDevOnOffWid->get();
+    }else{
+        mSwOnOffWid->get();
+    }
     mConfig->save();
     if(inputCheck()) {
         mPlugThread->startThread(mMode,tMode);

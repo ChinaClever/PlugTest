@@ -11,7 +11,7 @@ DisplayWid::DisplayWid(int mode, QWidget *parent) : ComTableWid(parent)
 void DisplayWid::initVolWid()
 {
     QStringList header;
-    header << tr("编号") << tr("动态") << tr("电压值") << tr("开次数")<< tr("关次数") << tr("成功次数") << tr("失败次数");
+    header << tr("编号") << tr("动态") << tr("电压值") << tr("开次数")<< tr("关次数") << tr("开成功次数") << tr("关成功次数");
 
     QString title = tr("测试数据列表");
     initTableWid(header, 1, title);
@@ -20,7 +20,7 @@ void DisplayWid::initVolWid()
 void DisplayWid::initCurWid()
 {
     QStringList header;
-    header << tr("编号") << tr("动态") << tr("电流值") << tr("开次数")<< tr("关次数") << tr("成功次数") << tr("失败次数");
+    header << tr("编号") << tr("动态") << tr("电流值") << tr("开次数")<< tr("关次数") << tr("开成功次数") << tr("关成功次数");
 
     QString title = tr("测试数据列表");
     initTableWid(header, ARRAY_SIZE, title);

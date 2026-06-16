@@ -98,7 +98,6 @@ void PlugThread::openFun(int i)
     } else {
         mSnmp->setInfo(mItem->swIp ,mItem->writeCrMinVolOids[0] , "2400");
         mSnmp->setInfo(mItem->swIp ,mItem->writeMinVolOids[0] , "2400");
-        packet->err++;
     }
 }
 
@@ -123,6 +122,7 @@ void PlugThread::closeFun(int i)
 
         // 调用辅助函数判断开关是否关闭
         bool isSwitchOff = isSwitchClosed(str1, targetValue);
+        //bool isSwitchOff = true;
 
         if(isSwitchOff) {
             successBreak = true;
@@ -132,12 +132,11 @@ void PlugThread::closeFun(int i)
 
     // 循环结束后，直接使用 successBreak 标志进行最终判断
     if(successBreak) {
-        packet->ok++;
+        packet->err++;
     } else {
         // 错误处理逻辑保持不变
         mSnmp->setInfo(mItem->swIp ,mItem->writeCrMinVolOids[0] , "2400");
         mSnmp->setInfo(mItem->swIp ,mItem->writeMinVolOids[0] , "2400");
-        packet->err++;
     }
 }
 
@@ -170,8 +169,19 @@ void PlugThread::open2Fun(int i)
 
     if(successBreak) {
         packet->ok++;
-    } else {
-        packet->err++;
+    }else{
+        packet->openerr++;
+        QFile file("error_log.txt");
+        if(file.open(QIODevice::Append | QIODevice::Text)) {
+            QTextStream out(&file);
+            QString time = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+
+            out << time << " | TestOpenCount=" << packet->open
+                << " | TestCloseCount=" << packet->close
+                << " | Open Err=" << packet->openerr
+                << " | Close Err=" << packet->closeerr << "\n";
+            file.close();
+        }
     }
 }
 
@@ -192,9 +202,21 @@ void PlugThread::close2Fun(int i)
     }
 
     if(str.toInt() == 0 && str1.toInt() == 0) {
-        packet->ok++;
-    } else {
         packet->err++;
+    }else{
+        packet->closeerr++;
+        // 记录到txt
+        QFile file("error_log.txt");
+        if(file.open(QIODevice::Append | QIODevice::Text)) {
+            QTextStream out(&file);
+            QString time = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+
+            out << time << " | TestOpenCount=" << packet->open
+                << " | TestCloseCount=" << packet->close
+                << " | Open Err=" << packet->openerr
+                << " | Close Err=" << packet->closeerr << "\n";
+            file.close();
+        }
     }
 }
 

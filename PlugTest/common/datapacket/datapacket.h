@@ -16,6 +16,8 @@ struct sDataPacket
     uint close;
     uint ok;
     uint err;
+    uint openerr;
+    uint closeerr;
     uint value;
 };
 
