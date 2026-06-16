@@ -25,9 +25,9 @@ void SwitchOnOff::init()
     ui->bitSwOidEdit4->setText(mItem->oids[3]);
 
     ui->bitCurOidEdit1->setText(mItem->readCurOids[0]);
-    ui->bitCurOidEdit1->setText(mItem->readCurOids[1]);
-    ui->bitCurOidEdit1->setText(mItem->readCurOids[2]);
-    ui->bitCurOidEdit1->setText(mItem->readCurOids[3]);
+    ui->bitCurOidEdit2->setText(mItem->readCurOids[1]);
+    ui->bitCurOidEdit3->setText(mItem->readCurOids[2]);
+    ui->bitCurOidEdit4->setText(mItem->readCurOids[3]);
     ui->numspinBox->setValue(mItem->bitNum);
     ui->delayOpenspinBox->setValue(mItem->delayOpen);
     ui->delayClosespinBox->setValue(mItem->delayClose);
@@ -44,9 +44,9 @@ void SwitchOnOff::get()
     mItem->oids[3] = ui->bitSwOidEdit4->text();
 
     mItem->readCurOids[0] = ui->bitCurOidEdit1->text();
-    mItem->readCurOids[1] = ui->bitCurOidEdit1->text();
-    mItem->readCurOids[2] = ui->bitCurOidEdit1->text();
-    mItem->readCurOids[3] = ui->bitCurOidEdit1->text();
+    mItem->readCurOids[1] = ui->bitCurOidEdit2->text();
+    mItem->readCurOids[2] = ui->bitCurOidEdit3->text();
+    mItem->readCurOids[3] = ui->bitCurOidEdit4->text();
     mItem->bitNum = ui->numspinBox->value();
     mItem->delayOpen = ui->delayOpenspinBox->value();
     mItem->delayClose = ui->delayClosespinBox->value();

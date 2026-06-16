@@ -176,7 +176,7 @@ void PlugThread::open2Fun(int i)
             QTextStream out(&file);
             QString time = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
 
-            out << time << " | TestOpenCount=" << packet->open
+            out << time <<" | output =" << i+1 << " | TestOpenCount=" << packet->open
                 << " | TestCloseCount=" << packet->close
                 << " | Open Err=" << packet->openerr
                 << " | Close Err=" << packet->closeerr << "\n";
@@ -211,7 +211,7 @@ void PlugThread::close2Fun(int i)
             QTextStream out(&file);
             QString time = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
 
-            out << time << " | TestOpenCount=" << packet->open
+            out << time<<" | output =" << i+1  << " | TestOpenCount=" << packet->open
                 << " | TestCloseCount=" << packet->close
                 << " | Open Err=" << packet->openerr
                 << " | Close Err=" << packet->closeerr << "\n";
